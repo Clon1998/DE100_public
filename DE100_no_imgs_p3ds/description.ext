@@ -1,0 +1,55 @@
+__EXEC (MISSION_ROOT = __FILE__ select [0, count __FILE__ - 15])
+onLoadName = "Altis Life RPG - DE100";
+onLoadMission = "modified by Lucian";
+loadScreen = "images\loadingScreen.jpg";
+author = "Tonic";
+class Header
+{
+    gameType = RPG;
+    minPlayers = 1;
+    maxPlayers = 156;
+};
+
+respawn = BASE;
+respawndelay = 0;
+disabledAI = 1;
+disableChannels[]={0,1,2};
+enableDebugConsole = 1;
+respawnDialog = 0;
+saving = 0;
+disableRandomization[] = {"All"};
+
+//garbage collector
+wreckManagerMode = 0;
+corpseManagerMode = 0;
+
+
+#include "dialog\MasterHandler.h"
+#include "cfgs\cfg_Master.hpp"
+
+
+
+/*
+    COMMANDS: PREPROCESSFILELINENUMBERS, LOADFILE, PREPROCESSFILE
+*/
+
+class CfgDisabledCommands
+{
+    class PREPROCESSFILELINENUMBERS
+    {
+        class SYNTAX1
+        {
+            targets[] = {0,1,0};
+            args[] = {{},{"STRING"}};
+        };
+    };
+
+    class PREPROCESSFILE
+    {
+        class SYNTAX1
+        {
+            targets[] = {0,1,0};
+            args[] = {{},{"STRING"}};
+        };
+    };
+};

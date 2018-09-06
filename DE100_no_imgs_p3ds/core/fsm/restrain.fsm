@@ -1,0 +1,332 @@
+/*%FSM<COMPILE "E:\Program Files (x86)\Steam\steamapps\common\Arma 3 Tools\FSMEditor\scriptedFSM.cfg, restrain">*/
+/*%FSM<HEAD>*/
+/*
+item0[] = {"Main_Init",0,250,-40.348839,-136.547119,49.651161,-86.547104,0.000000,"Main Init"};
+item1[] = {"END",1,4346,124.465759,-207.121124,214.465820,-157.121109,0.000000,"END"};
+item2[] = {"END_COND",4,218,121.924179,-136.582336,211.924194,-86.582291,10.000000,"END" \n "COND"};
+item3[] = {"force_anim",4,218,-39.847534,-54.046341,50.152466,-4.046341,0.000000,"force" \n "anim"};
+item4[] = {"Dedicated__or_HC",4,218,-40.036499,-207.341003,49.963501,-157.340988,11.000000,"Dedicated " \n "or HC"};
+item5[] = {"misc",2,250,-40.024872,30.833435,49.975143,80.833435,0.000000,"misc"};
+item6[] = {"_",-1,250,-0.087830,50.482330,13.456238,50.482330,0.000000,""};
+item7[] = {"check_for_Vehicl",4,218,-217.545380,30.918610,-127.545380,80.918610,5.000000,"check for" \n "Vehicle"};
+item8[] = {"foce_to_stay_in",2,250,-366.442322,32.423615,-276.442291,82.423615,0.000000,"foce to" \n "stay in" \n "veh"};
+item9[] = {"check_for_unAuth",4,218,-366.442322,-84.205994,-276.442322,-34.205994,0.000000,"check for" \n "unAuth" \n "moveOut"};
+item10[] = {"check_for_driver",4,218,-510.912384,32.423523,-420.912354,82.423523,1.000000,"check for" \n "driver"};
+item11[] = {"check_for_Auth_m",4,218,-215.774170,119.006302,-125.774170,169.006302,1.000000,"check for" \n "Auth" \n "moveOut"};
+item12[] = {"",7,210,-325.289246,140.179123,-317.289246,148.179138,0.000000,""};
+item13[] = {"check_for_reset",4,218,156.932678,30.930389,246.932678,80.930389,4.000000,"check for" \n "reset"};
+item14[] = {"check_for_execut",4,218,-152.087036,211.126221,-62.087036,261.126221,2.000000,"check for" \n "execution"};
+item15[] = {"check_for_fSit",4,218,18.456940,210.343628,108.456940,260.343628,3.000000,"check for" \n "fSit"};
+version=1;
+class LayoutItems
+{
+	class Item6
+	{
+		class ItemInfo
+		{
+			FontFace="Arial";
+			FontHeight=10;
+			lStyle=1;
+		};
+	};
+};
+link0[] = {0,2};
+link1[] = {0,3};
+link2[] = {0,4};
+link3[] = {2,1};
+link4[] = {3,5};
+link5[] = {4,1};
+link6[] = {5,2};
+link7[] = {5,3};
+link8[] = {5,7};
+link9[] = {5,13};
+link10[] = {5,14};
+link11[] = {5,15};
+link12[] = {7,8};
+link13[] = {8,2};
+link14[] = {8,9};
+link15[] = {8,10};
+link16[] = {8,12};
+link17[] = {9,8};
+link18[] = {10,8};
+link19[] = {11,5};
+link20[] = {12,11};
+link21[] = {13,5};
+link22[] = {14,5};
+link23[] = {15,5};
+globals[] = {0.000000,0,0,0,0,640,480,1,65,6316128,1,-567.280090,522.662415,784.719910,-269.447693,914,884,1};
+window[] = {2,-1,-1,-1,-1,998,2076,3757,156,3,932};
+*//*%FSM</HEAD>*/
+class FSM
+{
+        fsmName = "restrain";
+        class States
+        {
+                /*%FSM<STATE "Main_Init">*/
+                class Main_Init
+                {
+                        name = "Main_Init";
+                        itemno = 0;
+                        init = /*%FSM<STATEINIT""">*/"params[" \n
+                         "	[""_source"", objNull, [objNull]]" \n
+                         "];" \n
+                         "" \n
+                         "player setVariable [""restrained"",true,true];" \n
+                         "player setVariable [""Escorting"",false,true];" \n
+                         "player setVariable [""executionReady"",nil,true];" \n
+                         "player setVariable [""forceSit"",nil,true];" \n
+                         "player setVariable [""restrainSource"",netID _source,true];" \n
+                         "private _grp = if (count units (group player) == 1) then {" \n
+                         "	grpNull;" \n
+                         "} else {" \n
+                         "	(group player);" \n
+                         "};" \n
+                         "" \n
+                         "if (!isNull _grp) then {" \n
+                         "	private _tmpGrp = switch (playerSide) do { " \n
+                         "		case west : {createGroup west;}; " \n
+                         "		case independent : {createGroup independent;};" \n
+                         "		case civilian : {createGroup civilian;}; " \n
+                         "	};" \n
+                         "	[player] joinSilent _tmpGrp;" \n
+                         "};" \n
+                         "" \n
+                         "if (player getVariable [""surrendered"",false]) then {" \n
+                         "	player setVariable [""surrendered"",false,true];" \n
+                         "};" \n
+                         "private _alwaysAnims = [""AmovPercMstpSnonWnonDnon_Ease""];" \n
+                         "" \n
+                         "private _anim = if (missionNamespace getVariable [""life_istazed"",false]) then {" \n
+                         "	player setVariable [""forceSit"",true,true];" \n
+                         "	[""Acts_AidlPsitMstpSsurWnonDnon_loop"",""Acts_AidlPsitMstpSsurWnonDnon_out""];" \n
+                         "} else {" \n
+                         "	[""AmovPercMstpSnonWnonDnon_Ease"",""AmovPercMstpSnonWnonDnon_EaseOut""];" \n
+                         "};" \n
+                         "" \n
+                         "if (side _source isEqualTo civilian) then {" \n
+                         "	[""Du wurdest gefesselt."",false,""fast""] call life_fnc_notification_system;" \n
+                         "} else {" \n
+                         "	[player,""cuff""] remoteExec [""say3D"",allPlayers select {player distance _x < 50}];" \n
+                         "	[format[localize ""STR_Cop_Retrained"",_source call life_fnc_name],false,""fast""] call life_fnc_notification_system;" \n
+                         "};" \n
+                         "//Veh check Var" \n
+                         "private _tmpAllowed = false;" \n
+                         ""/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "Dedicated__or_HC">*/
+                                class Dedicated__or_HC
+                                {
+                                        itemno = 4;
+                                        priority = 11.000000;
+                                        to="END";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"!hasInterface"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                                /*%FSM<LINK "END_COND">*/
+                                class END_COND
+                                {
+                                        itemno = 2;
+                                        priority = 10.000000;
+                                        to="END";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"!alive player || !(player getVariable [""isAlive"",true]) || !(player getVariable [""restrained"",false])"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                                /*%FSM<LINK "force_anim">*/
+                                class force_anim
+                                {
+                                        itemno = 3;
+                                        priority = 0.000000;
+                                        to="misc";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"animationState player != toLower(_anim select 0) || (_anim select 0) in _alwaysAnims"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/"//EXEC it 2x since _alwaysAnims sux on slower runtimes" \n
+                                         "[player,(_anim select 0)] call life_fnc_doAnimation;" \n
+                                         ""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "END">*/
+                class END
+                {
+                        name = "END";
+                        itemno = 1;
+                        init = /*%FSM<STATEINIT""">*/"if (alive player && player getVariable [""isAlive"",true]) then {" \n
+                         "	[player,(_anim select 1),1] call life_fnc_doAnimation;" \n
+                         "	player setVariable [""Escorting"",false,true];" \n
+                         " 	detach player;" \n
+                         "};" \n
+                         "if (!isNull _grp) then {" \n
+                         "	[player] joinSilent _grp;" \n
+                         "}" \n
+                         ""/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "misc">*/
+                class misc
+                {
+                        name = "misc";
+                        itemno = 5;
+                        init = /*%FSM<STATEINIT""">*/"[player,(_anim select 0)] call life_fnc_doAnimation;"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "END_COND">*/
+                                class END_COND
+                                {
+                                        itemno = 2;
+                                        priority = 10.000000;
+                                        to="END";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"!alive player || !(player getVariable [""isAlive"",true]) || !(player getVariable [""restrained"",false])"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                                /*%FSM<LINK "check_for_Vehicl">*/
+                                class check_for_Vehicl
+                                {
+                                        itemno = 7;
+                                        priority = 5.000000;
+                                        to="foce_to_stay_in";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"!isNull objectParent player"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/"private _veh = objectParent player;"/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                                /*%FSM<LINK "check_for_reset">*/
+                                class check_for_reset
+                                {
+                                        itemno = 13;
+                                        priority = 4.000000;
+                                        to="misc";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"(player getVariable [""Escorting"",false] || !(player getVariable [""forceSit"",true]) || !(player getVariable [""executionReady"",true])) && (_anim select 0) != ""AmovPercMstpSnonWnonDnon_Ease"""/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/"//Important to call this as NOW otherwise stuck in Ease anim till ease Queq ended" \n
+                                         "[player,(_anim select 1),1] call life_fnc_doAnimation;" \n
+                                         "_anim = [""AmovPercMstpSnonWnonDnon_Ease"",""AmovPercMstpSnonWnonDnon_EaseOut""];"/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                                /*%FSM<LINK "check_for_fSit">*/
+                                class check_for_fSit
+                                {
+                                        itemno = 15;
+                                        priority = 3.000000;
+                                        to="misc";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"player getVariable [""forceSit"",false] && (_anim select 0) != ""Acts_AidlPsitMstpSsurWnonDnon_loop"" && !(player getVariable [""Escorting"",false])"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/"_anim = [""Acts_AidlPsitMstpSsurWnonDnon_loop"",""Acts_AidlPsitMstpSsurWnonDnon_out""];" \n
+                                         "//Important to call this as NOW otherwise stuck in Ease anim till ease Queq ended" \n
+                                         "[player,(_anim select 0),1] call life_fnc_doAnimation;"/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                                /*%FSM<LINK "check_for_execut">*/
+                                class check_for_execut
+                                {
+                                        itemno = 14;
+                                        priority = 2.000000;
+                                        to="misc";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"player getVariable [""executionReady"",false] && (_anim select 0) != ""Acts_ExecutionVictim_Loop"" && !(player getVariable [""Escorting"",false])"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/"_anim =[""Acts_ExecutionVictim_Loop"",""Acts_ExecutionVictim_Unbow""];" \n
+                                         "//Important to call this as NOW otherwise stuck in Ease anim till ease Queq ended" \n
+                                         "[player,(_anim select 0),1] call life_fnc_doAnimation;"/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                                /*%FSM<LINK "force_anim">*/
+                                class force_anim
+                                {
+                                        itemno = 3;
+                                        priority = 0.000000;
+                                        to="misc";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"animationState player != toLower(_anim select 0) || (_anim select 0) in _alwaysAnims"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/"//EXEC it 2x since _alwaysAnims sux on slower runtimes" \n
+                                         "[player,(_anim select 0)] call life_fnc_doAnimation;" \n
+                                         ""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "foce_to_stay_in">*/
+                class foce_to_stay_in
+                {
+                        name = "foce_to_stay_in";
+                        itemno = 8;
+                        init = /*%FSM<STATEINIT""">*/"if !(player getVariable [""forcedVeh"",false]) then {" \n
+                         "	moveOut player;" \n
+                         "	[""Du kannst nicht in ein Fahrzeug steigen."",true,""fast""] call life_fnc_notification_system;" \n
+                         "}"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "END_COND">*/
+                                class END_COND
+                                {
+                                        itemno = 2;
+                                        priority = 10.000000;
+                                        to="END";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"!alive player || !(player getVariable [""isAlive"",true]) || !(player getVariable [""restrained"",false])"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                                /*%FSM<LINK "check_for_driver">*/
+                                class check_for_driver
+                                {
+                                        itemno = 10;
+                                        priority = 1.000000;
+                                        to="foce_to_stay_in";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"driver _veh isEqualTo player && player getVariable [""forcedVeh"",false]"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/"[""Du kannst das Fahrzeug nicht fahren."",true,""fast""] call life_fnc_notification_system;" \n
+                                         "moveOut player;" \n
+                                         "_tmpAllowed = true;" \n
+                                         "player moveInCargo _veh;" \n
+                                         "_tmpAllowed = false;"/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                                /*%FSM<LINK "check_for_Auth_m">*/
+                                class check_for_Auth_m
+                                {
+                                        itemno = 11;
+                                        priority = 1.000000;
+                                        to="misc";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"isNull objectParent player && (!(player getVariable [""forcedVeh"",false]) || isNull _veh)"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                                /*%FSM<LINK "check_for_unAuth">*/
+                                class check_for_unAuth
+                                {
+                                        itemno = 9;
+                                        priority = 0.000000;
+                                        to="foce_to_stay_in";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"isNull objectParent player && player getVariable [""forcedVeh"",false] && !_tmpAllowed"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/"player moveInCargo _veh;"/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+        };
+        initState="Main_Init";
+        finalStates[] =
+        {
+                "END",
+        };
+};
+/*%FSM</COMPILE>*/

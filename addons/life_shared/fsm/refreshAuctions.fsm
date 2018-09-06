@@ -1,0 +1,186 @@
+/*%FSM<COMPILE "E:\Program Files (x86)\Steam\steamapps\common\Arma 3 Tools\FSMEditor\scriptedFSM.cfg, refreshAuctions">*/
+/*%FSM<HEAD>*/
+/*
+item0[] = {"init",0,250,-65.004578,-391.651611,24.995417,-341.651672,0.000000,"init"};
+item1[] = {"refresh_Auctions",2,4346,-65.742516,-215.355728,24.257507,-165.355728,0.000000,"refresh" \n "Auctions"};
+item2[] = {"Check_END",4,218,128.360596,-391.434204,218.360596,-341.434204,1.000000,"Check" \n "END"};
+item3[] = {"End_FSM",1,250,128.578995,-491.815277,218.579025,-441.815277,0.000000,"End FSM"};
+item4[] = {"wait",4,218,-65.128906,-315.382202,24.871094,-265.382385,0.000000,"wait"};
+link0[] = {0,2};
+link1[] = {0,4};
+link2[] = {1,2};
+link3[] = {1,4};
+link4[] = {2,3};
+link5[] = {4,1};
+globals[] = {0.000000,0,0,0,0,640,480,1,51,6316128,1,-151.655045,438.072723,-101.828552,-459.592590,274,884,1};
+window[] = {2,-1,-1,-1,-1,989,2154,3797,234,3,292};
+*//*%FSM</HEAD>*/
+class FSM
+{
+        fsmName = "refreshAuctions";
+        class States
+        {
+                /*%FSM<STATE "init">*/
+                class init
+                {
+                        name = "init";
+                        itemno = 0;
+                        init = /*%FSM<STATEINIT""">*/"[[""Started HC Side refreshAuction"",""Started Server Side refreshAuction""] select isDedicated] call A3Log;" \n
+                         "private _timer = diag_ticktime;"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "Check_END">*/
+                                class Check_END
+                                {
+                                        itemno = 2;
+                                        priority = 1.000000;
+                                        to="End_FSM";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"_thisFSM getFSMVariable ""stopfsm"""/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                                /*%FSM<LINK "wait">*/
+                                class wait
+                                {
+                                        itemno = 4;
+                                        priority = 0.000000;
+                                        to="refresh_Auctions";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"diag_ticktime - _timer > 300 && !(de100_ac_storage getVariable [""auc_edit"",false]) && !((missionNamespace getVariable [""life_real_time"",[]]) isEqualTo []) && missionNamespace getVariable [""life_ac_ready"",false]"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "refresh_Auctions">*/
+                class refresh_Auctions
+                {
+                        name = "refresh_Auctions";
+                        itemno = 1;
+                        init = /*%FSM<STATEINIT""">*/"disableSerialization;" \n
+                         "_timer = diag_ticktime;" \n
+                         "de100_ac_storage setVariable [""auc_edit"",true,true];" \n
+                         "private _s = diag_tickTime;" \n
+                         "private _aA = de100_ac_storage getVariable [""active_auctions"",[]];" \n
+                         "private _pA = de100_ac_storage getVariable [""past_auctions"",[]];" \n
+                         "private _d = [];" \n
+                         "{" \n
+                         "	_x params[" \n
+                         "        [""_aId"", 0, [0]]," \n
+                         "        [""_aD"", [], [[]]]" \n
+                         "    ];" \n
+                         "    if (([_aD select 5] call life_fnc_timeUnix) < ([life_real_time] call life_fnc_timeUnix)) then {" \n
+                         "        _d pushBackUnique _aId;" \n
+                         "        _aD set [11,true];" \n
+                         "        _pA pushBackUnique [_aId,_aD];" \n
+                         "    };" \n
+                         "    nil;" \n
+                         "} count _aA;" \n
+                         "{" \n
+                         "    [_x,_aA] call life_fnc_setDataAtKey;" \n
+                         "    nil;" \n
+                         "} count _d;" \n
+                         "{" \n
+                         "    _x params[" \n
+                         "        [""_aId"", 0, [0]]," \n
+                         "        [""_aD"", [], [[]]]" \n
+                         "    ];" \n
+                         "    private _bD = de100_ac_storage getVariable [format[""%1_auction_history"",_aId],[]];" \n
+                         "    _bD = _bD select (count _bD -1);" \n
+                         "    private _f = _aD select 12;" \n
+                         "    call {" \n
+                         "        if (_f == 0) exitWith {" \n
+                         "            private _w = (_bD select 0) call life_fnc_unitFromUid;" \n
+                         "            private _c = (_aD select 0) call life_fnc_unitFromUid;" \n
+                         "            if (isNull _w && isNull _c) then {" \n
+                         "                private _p = [[""winner"",_bD select 0]];" \n
+                         "                if !((_aD select 0) isEqualTo (_bD select 0)) then {" \n
+                         "                    _p pushBackUnique [""creater"",_aD select 0];" \n
+                         "                };" \n
+                         "                ["""","""",_aId,_p] call AC_fnc_distribute;" \n
+                         "            } else {" \n
+                         "                [_aId,_aD,_bD,false] remoteExec [""life_fnc_distributeArticle"",[_w,_c] select (isNull _w)];" \n
+                         "            };" \n
+                         "        };" \n
+                         "        if (_f == 1) exitWith {" \n
+                         "            private _w = (_bD select 0) call life_fnc_unitFromUid;" \n
+                         "            if (isNull _w) then {" \n
+                         "                ["""","""",_aId,[[""winner"",_bD select 0]]] call AC_fnc_distribute;" \n
+                         "            } else {" \n
+                         "                [_aId,_aD,_bD,true] remoteExec [""life_fnc_distributeArticle"",_w];" \n
+                         "            };" \n
+                         "        };" \n
+                         "        if (_f == 2) exitWith {" \n
+                         "            private _c = (_aD select 0) call life_fnc_unitFromUid;" \n
+                         "            if (isNull _c) then {" \n
+                         "                ["""","""",_aId,[[""creater"",_bD select 0]]] call AC_fnc_distribute;" \n
+                         "            } else {" \n
+                         "                [_aId,_aD,_bD,true] remoteExec [""life_fnc_distributeArticle"",_c];" \n
+                         "            };" \n
+                         "        };" \n
+                         "    };" \n
+                         "    nil;" \n
+                         "} count (_pA select {((_x select 1) select 12) != 3});" \n
+                         "de100_ac_storage setVariable [""active_auctions"",_aA];" \n
+                         "de100_ac_storage setVariable [""past_auctions"",_pA];" \n
+                         "private _trgs = allPlayers select {_x getVariable [""auction_open"",false]};" \n
+                         "if (count _trgs > 0) then {" \n
+                         "    [_d,_pA select {(_x select 0) in _d},[],""past_auctions""] remoteExecCall [""life_fnc_refreshAuction"",_trgs];" \n
+                         "};" \n
+                         "_d apply {format[""'%1'"",_x call life_fnc_number]};" \n
+                         "if !(_d isEqualTo []) then {" \n
+                         "    [format[""UPDATE `auctions` SET `sold`='1' WHERE `id` in (%1);"",_d joinString "",""],1] call DB_fnc_asyncCall;" \n
+                         "};" \n
+                         "diag_log format [""Auc-Refresh after %1 Sek"",diag_tickTime - _s];" \n
+                         "de100_ac_storage setVariable [""auc_edit"",false,true];"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "Check_END">*/
+                                class Check_END
+                                {
+                                        itemno = 2;
+                                        priority = 1.000000;
+                                        to="End_FSM";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"_thisFSM getFSMVariable ""stopfsm"""/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                                /*%FSM<LINK "wait">*/
+                                class wait
+                                {
+                                        itemno = 4;
+                                        priority = 0.000000;
+                                        to="refresh_Auctions";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"diag_ticktime - _timer > 300 && !(de100_ac_storage getVariable [""auc_edit"",false]) && !((missionNamespace getVariable [""life_real_time"",[]]) isEqualTo []) && missionNamespace getVariable [""life_ac_ready"",false]"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "End_FSM">*/
+                class End_FSM
+                {
+                        name = "End_FSM";
+                        itemno = 3;
+                        init = /*%FSM<STATEINIT""">*/"[""Stoped Server Side refreshAuction""] call A3Log;"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                        };
+                };
+                /*%FSM</STATE>*/
+        };
+        initState="init";
+        finalStates[] =
+        {
+                "End_FSM",
+        };
+};
+/*%FSM</COMPILE>*/

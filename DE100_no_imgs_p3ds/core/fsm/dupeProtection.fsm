@@ -1,0 +1,137 @@
+/*%FSM<COMPILE "E:\Program Files (x86)\Steam\steamapps\common\Arma 3 Tools\FSMEditor\scriptedFSM.cfg, dupeProtection">*/
+/*%FSM<HEAD>*/
+/*
+item0[] = {"INIT",0,250,89.757095,192.240234,179.757111,242.240234,0.000000,"INIT"};
+item1[] = {"Evil",4,4314,-68.469299,371.547119,21.530701,421.547119,0.000000,"Evil"};
+item2[] = {"Stop_FSM",4,218,89.534729,294.147369,179.534729,344.147400,1.000000,"Stop FSM"};
+item3[] = {"Stop_FSM",1,250,89.600037,455.448059,179.600067,505.448029,0.000000,"Stop FSM"};
+item4[] = {"END_Evil",1,250,-68.644684,454.667572,21.355347,504.667511,0.000000,"END" \n "Evil"};
+item5[] = {"w8_for_open_dial",4,218,-68.836136,193.132050,21.163864,243.132034,0.000000,"w8 for open" \n "dialog"};
+item6[] = {"buffer",2,250,-68.623901,294.236176,21.376114,344.236176,0.000000,"buffer"};
+link0[] = {0,2};
+link1[] = {0,5};
+link2[] = {1,4};
+link3[] = {2,3};
+link4[] = {5,6};
+link5[] = {6,1};
+link6[] = {6,2};
+globals[] = {0.000000,0,0,0,0,640,480,1,9,6316128,1,-372.059906,297.401093,667.758484,122.317436,1085,884,1};
+window[] = {2,-1,-1,-1,-1,879,130,1090,130,3,1103};
+*//*%FSM</HEAD>*/
+class FSM
+{
+        fsmName = "dupeProtection";
+        class States
+        {
+                /*%FSM<STATE "INIT">*/
+                class INIT
+                {
+                        name = "INIT";
+                        itemno = 0;
+                        init = /*%FSM<STATEINIT""">*/"params[" \n
+                         "	[""_object"", objNull, [objNull]]," \n
+                         "	[""_type"", """", [""""]]" \n
+                         "];" \n
+                         "dupeProtectionFSM setFSMVariable [""stopfsm"",false];"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "Stop_FSM">*/
+                                class Stop_FSM
+                                {
+                                        itemno = 2;
+                                        priority = 1.000000;
+                                        to="Stop_FSM";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"dupeProtectionFSM getFSMVariable ""stopfsm"""/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                                /*%FSM<LINK "w8_for_open_dial">*/
+                                class w8_for_open_dial
+                                {
+                                        itemno = 5;
+                                        priority = 0.000000;
+                                        to="buffer";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"dialog"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "Stop_FSM">*/
+                class Stop_FSM
+                {
+                        name = "Stop_FSM";
+                        itemno = 3;
+                        init = /*%FSM<STATEINIT""">*/""/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "END_Evil">*/
+                class END_Evil
+                {
+                        name = "END_Evil";
+                        itemno = 4;
+                        init = /*%FSM<STATEINIT""">*/"closeDialog 0;" \n
+                         "[""Das Inventar wird gerade von jemand anderem benutzt"",true,""fast""] call life_fnc_notification_system;" \n
+                         "" \n
+                         "if (life_HC_isActive) then {" \n
+                         "	[format[""%1(UID: %2) hat den DupeProtectionFSM ausgelöst. VehType: %3, gespeicherte UID: %4"",profileName,getPlayerUID player,_type,_object getVariable[""trunkUser"",""Nil""]],""DupeProtection""] remoteExec [""A3Log"",HC_Life];" \n
+                         "} else {" \n
+                         "	[format[""%1(UID: %2) hat den DupeProtectionFSM ausgelöst. VehType: %3, gespeicherte UID: %4"",profileName,getPlayerUID player,_type,_object getVariable[""trunkUser"",""Nil""]],""DupeProtection""] remoteExec [""A3Log"",2];" \n
+                         "};	"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "buffer">*/
+                class buffer
+                {
+                        name = "buffer";
+                        itemno = 6;
+                        init = /*%FSM<STATEINIT""">*/""/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "Stop_FSM">*/
+                                class Stop_FSM
+                                {
+                                        itemno = 2;
+                                        priority = 1.000000;
+                                        to="Stop_FSM";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"dupeProtectionFSM getFSMVariable ""stopfsm"""/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                                /*%FSM<LINK "Evil">*/
+                                class Evil
+                                {
+                                        itemno = 1;
+                                        priority = 0.000000;
+                                        to="END_Evil";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"(_object getVariable[""trunkUser"",""""]) != (getPlayerUID player) || !isNull (_object getVariable [""reviver"",objNull])"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+        };
+        initState="INIT";
+        finalStates[] =
+        {
+                "Stop_FSM",
+                "END_Evil",
+        };
+};
+/*%FSM</COMPILE>*/

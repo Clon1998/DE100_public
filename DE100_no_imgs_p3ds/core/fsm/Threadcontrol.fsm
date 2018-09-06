@@ -1,0 +1,80 @@
+/*%FSM<COMPILE "E:\Program Files (x86)\SteamExtern\steamapps\common\Arma 3 Tools\FSMEditor\scriptedFSM.cfg, Threadcontrol">*/
+/*%FSM<HEAD>*/
+/*
+item0[] = {"Initialisierung",0,250,-172.586243,-112.531830,-82.586212,-62.531830,0.000000,"Initialisierung"};
+item1[] = {"hardcoded_sleep",4,218,-115.905708,123.367218,81.177826,228.705750,0.000000,"hardcoded sleep"};
+item2[] = {"exec_code",2,250,78.392242,10.783020,168.392273,60.783051,0.000000,"exec code"};
+link0[] = {0,1};
+link1[] = {1,2};
+link2[] = {2,1};
+globals[] = {0.000000,0,0,0,0,640,480,1,29,6316128,1,-546.036743,268.229065,385.794678,-163.023865,954,643,1};
+window[] = {0,-1,-1,-1,-1,1023,208,1784,208,1,972};
+*//*%FSM</HEAD>*/
+class FSM
+{
+        fsmName = "Threadcontrol";
+        class States
+        {
+                /*%FSM<STATE "Initialisierung">*/
+                class Initialisierung
+                {
+                        name = "Initialisierung";
+                        itemno = 0;
+                        init = /*%FSM<STATEINIT""">*/"private[""_checktime"",""_last""];" \n
+                         "_checktime=.25;" \n
+                         "_last=time;" \n
+                         "" \n
+                         "if(isNil'life_threads')then{life_threads=[]};"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "hardcoded_sleep">*/
+                                class hardcoded_sleep
+                                {
+                                        itemno = 1;
+                                        priority = 0.000000;
+                                        to="exec_code";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"(time-_last)>=_checktime&&!isNil'life_threads'"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "exec_code">*/
+                class exec_code
+                {
+                        name = "exec_code";
+                        itemno = 2;
+                        init = /*%FSM<STATEINIT""">*/"_last=time;" \n
+                         "{" \n
+                         "	if((time-(call(_x select 0)))>=(_x select 1))then{" \n
+                         "		[]spawn(_x select 2);" \n
+                         "		life_threads set[_forEachIndex,[_x select 0,time,_x select 2]]" \n
+                         "	}" \n
+                         "}forEach life_threads;"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "hardcoded_sleep">*/
+                                class hardcoded_sleep
+                                {
+                                        itemno = 1;
+                                        priority = 0.000000;
+                                        to="exec_code";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"(time-_last)>=_checktime&&!isNil'life_threads'"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+        };
+        initState="Initialisierung";
+        finalStates[] =
+        {
+        };
+};
+/*%FSM</COMPILE>*/

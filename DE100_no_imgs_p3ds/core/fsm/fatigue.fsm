@@ -1,0 +1,512 @@
+/*%FSM<COMPILE "E:\Program Files (x86)\Steam\steamapps\common\Arma 3 Tools\FSMEditor\scriptedFSM.cfg, De100 Fatigue System">*/
+/*%FSM<HEAD>*/
+/*
+item0[] = {"life_water_boy",4,218,-405.062347,-68.524780,-315.062347,-18.524780,3.000000,"life_water_boy"};
+item1[] = {"life_prof_noXp",4,218,-500.462524,-68.433670,-410.462494,-18.433670,4.000000,"life_prof_noXp"};
+item2[] = {"fatigue",4,218,-188.369934,-67.405228,-98.369934,-17.405228,1.000000,"fatigue"};
+item3[] = {"Start",0,250,-341.513336,-333.000336,-251.513336,-283.000366,0.000000,"Start"};
+item4[] = {"Sleep",4,218,-628.825562,-174.070633,-538.825562,-124.070633,0.000000,"Sleep"};
+item5[] = {"exhaust_them__noXp",2,250,-502.832520,4.638550,-412.832489,54.638550,0.000000,"exhaust them" \n "(noXp)"};
+item6[] = {"loop_timer",4,218,-502.091187,85.454468,-412.091431,135.454468,0.000000,"loop timer"};
+item7[] = {"reset_exhausting",2,250,-197.025635,267.273438,-107.025421,317.273438,0.000000,"reset exhausting"};
+item8[] = {"vehicle_player",4,218,-283.021576,-67.238937,-193.021576,-17.238937,2.000000,"vehicle player"};
+item9[] = {"",7,210,-300.141388,-91.950844,-292.141388,-83.950851,0.000000,""};
+item10[] = {"",7,210,-363.862213,-91.851700,-355.862213,-83.851700,0.000000,""};
+item11[] = {"",7,210,-458.748199,-91.744522,-450.748199,-83.744522,0.000000,""};
+item12[] = {"",7,210,-240.302795,-91.851685,-232.302780,-83.851685,0.000000,""};
+item13[] = {"",7,210,-146.881989,-91.700912,-138.882004,-83.700912,0.000000,""};
+item14[] = {"_",8,218,-341.535828,-259.586639,-251.535828,-209.586655,0.000000,""};
+item15[] = {"loop_expression",2,250,-501.350098,182.581757,-411.350098,232.581757,0.000000,"loop expression"};
+item16[] = {"loop_exit",4,218,-500.374969,267.145264,-410.374908,317.145264,1.000000,"loop exit"};
+item17[] = {"",7,210,-807.129456,-152.897369,-799.129456,-144.897369,0.000000,""};
+item18[] = {"reset_walk",2,250,-405.049988,4.030304,-315.049988,54.030304,0.000000,"reset walk"};
+item19[] = {"Sleeper",2,250,-848.172363,134.613892,-758.172363,184.613892,0.000000,"Sleeper"};
+item20[] = {"_",8,218,-324.456421,126.960213,-234.456390,176.960205,0.000000,""};
+item21[] = {"Init",2,4346,-341.238037,-174.368103,-251.238037,-124.368103,0.000000,"Init"};
+item22[] = {"get_stamina_back",2,250,-282.859497,6.600342,-192.859497,56.600342,0.000000,"get stamina back"};
+item23[] = {"add_stamina",2,250,-183.587219,6.669189,-93.587219,56.669189,0.000000,"add stamina"};
+item24[] = {"max_reached",4,218,-76.590881,5.381042,13.409119,55.381042,1.000000,"max" \n "reached"};
+item25[] = {"exhaust_them__getXp",2,250,37.867310,5.705963,127.867317,55.705963,0.000000,"exhaust them" \n "(getXp)"};
+item26[] = {"loop_timer",4,218,38.837769,92.260559,128.837769,142.260559,0.000000,"loop timer"};
+item27[] = {"loop_expression_1",2,250,37.979492,172.286377,127.979507,222.286377,0.000000,"loop expression"};
+item28[] = {"loop_exit",4,218,39.623901,267.504822,129.623901,317.504822,1.000000,"loop exit"};
+item29[] = {"Dedicated__or_HC",4,218,-208.448730,-331.823059,-118.448730,-281.823059,1.000000,"Dedicated " \n "or HC"};
+item30[] = {"END",1,250,-90.037048,-331.107422,-0.037018,-281.107452,0.000000,"END"};
+item31[] = {"Spieler_ist_tot",4,218,-601.182434,-67.557114,-511.182434,-17.557114,5.000000,"Spieler ist" \n "tot"};
+item32[] = {"",7,210,-562.114197,-91.465057,-554.114197,-83.465057,0.000000,""};
+link0[] = {0,18};
+link1[] = {1,5};
+link2[] = {2,23};
+link3[] = {3,14};
+link4[] = {3,29};
+link5[] = {4,21};
+link6[] = {5,6};
+link7[] = {6,15};
+link8[] = {7,20};
+link9[] = {8,22};
+link10[] = {9,10};
+link11[] = {9,12};
+link12[] = {9,20};
+link13[] = {10,0};
+link14[] = {10,11};
+link15[] = {11,1};
+link16[] = {11,32};
+link17[] = {12,8};
+link18[] = {12,13};
+link19[] = {13,2};
+link20[] = {14,21};
+link21[] = {15,6};
+link22[] = {15,16};
+link23[] = {16,7};
+link24[] = {17,4};
+link25[] = {18,20};
+link26[] = {19,17};
+link27[] = {20,19};
+link28[] = {21,9};
+link29[] = {22,20};
+link30[] = {23,20};
+link31[] = {23,24};
+link32[] = {24,25};
+link33[] = {25,26};
+link34[] = {26,27};
+link35[] = {27,26};
+link36[] = {27,28};
+link37[] = {28,7};
+link38[] = {29,30};
+link39[] = {31,19};
+link40[] = {32,31};
+globals[] = {0.000000,0,0,0,0,640,480,1,68,6316128,1,-803.757141,288.533447,293.836792,-392.563721,1028,646,1};
+window[] = {0,-1,-1,-1,-1,916,116,1797,98,1,1046};
+*//*%FSM</HEAD>*/
+class FSM
+{
+        fsmName = "De100 Fatigue System";
+        class States
+        {
+                /*%FSM<STATE "Start">*/
+                class Start
+                {
+                        name = "Start";
+                        itemno = 3;
+                        init = /*%FSM<STATEINIT""">*/"private [""_counter"",""_data"",""_walked"",""_lvldist"",""_timer"",""_sleeper"",""_getXp"",""_speed"",""_wightPlayer"",""_type"",""_typeCarry""];" \n
+                         "_sleeper = time;" \n
+                         "_walked = 0;" \n
+                         "_type = call {if (playerSide isEqualTo civilian) exitWith {""running_Prof"";};if (playerSide isEqualTo west) exitWith {""running_cop_Prof"";};if (playerSide isEqualTo independent) exitWith {""running_thr_Prof"";};};" \n
+                         "_typeCarry = call {if (playerSide isEqualTo civilian) exitWith {""carrying_Prof"";};if (playerSide isEqualTo west) exitWith {""carrying_cop_Prof"";};if (playerSide isEqualTo independent) exitWith {""carrying_thr_Prof"";};};"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "Dedicated__or_HC">*/
+                                class Dedicated__or_HC
+                                {
+                                        itemno = 29;
+                                        priority = 1.000000;
+                                        to="END";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"!hasInterface"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                                /*%FSM<LINK "_">*/
+                                class _
+                                {
+                                        itemno = 14;
+                                        priority = 0.000000;
+                                        to="Init";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "exhaust_them__noXp">*/
+                class exhaust_them__noXp
+                {
+                        name = "exhaust_them__noXp";
+                        itemno = 5;
+                        init = /*%FSM<STATEINIT""">*/"life_prof_noXp = false;" \n
+                         "_walked = 0;" \n
+                         "player enableFatigue true;" \n
+                         "player forceWalk true;" \n
+                         "player setFatigue 1;" \n
+                         "player setCustomAimCoef 8;" \n
+                         "_counter = 0;" \n
+                         "_timer = 0;"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "loop_timer">*/
+                                class loop_timer
+                                {
+                                        itemno = 6;
+                                        priority = 0.000000;
+                                        to="loop_expression";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"_counter < 30 && (time - _timer) >= 0.1"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "reset_exhausting">*/
+                class reset_exhausting
+                {
+                        name = "reset_exhausting";
+                        itemno = 7;
+                        init = /*%FSM<STATEINIT""">*/"player setFatigue 0;" \n
+                         "player forceWalk false;" \n
+                         "player enableFatigue false;" \n
+                         "player setCustomAimCoef 1;"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "_">*/
+                                class _
+                                {
+                                        itemno = 20;
+                                        priority = 0.000000;
+                                        to="Sleeper";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "loop_expression">*/
+                class loop_expression
+                {
+                        name = "loop_expression";
+                        itemno = 15;
+                        init = /*%FSM<STATEINIT""">*/"_counter = _counter + 0.05;" \n
+                         "_timer = time;" \n
+                         "if (getFatigue player != 1) then {player setFatigue 1;};" \n
+                         "life_stamina_bar = 1 - (_counter / 30);" \n
+                         ""/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "loop_exit">*/
+                                class loop_exit
+                                {
+                                        itemno = 16;
+                                        priority = 1.000000;
+                                        to="reset_exhausting";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"_counter >= 30 || !alive player"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                                /*%FSM<LINK "loop_timer">*/
+                                class loop_timer
+                                {
+                                        itemno = 6;
+                                        priority = 0.000000;
+                                        to="loop_expression";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"_counter < 30 && (time - _timer) >= 0.1"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "reset_walk">*/
+                class reset_walk
+                {
+                        name = "reset_walk";
+                        itemno = 18;
+                        init = /*%FSM<STATEINIT""">*/"life_water_boy = false;" \n
+                         "_walked = 0 ;"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "_">*/
+                                class _
+                                {
+                                        itemno = 20;
+                                        priority = 0.000000;
+                                        to="Sleeper";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "Sleeper">*/
+                class Sleeper
+                {
+                        name = "Sleeper";
+                        itemno = 19;
+                        init = /*%FSM<STATEINIT""">*/"_sleeper = time;"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "Sleep">*/
+                                class Sleep
+                                {
+                                        itemno = 4;
+                                        priority = 0.000000;
+                                        to="Init";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"(time - _sleeper >= 0.5) && alive player && player getVariable [""isAlive"",true] && !(player getVariable [""restrained"",false])"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "Init">*/
+                class Init
+                {
+                        name = "Init";
+                        itemno = 21;
+                        init = /*%FSM<STATEINIT""">*/"_speed = (speed player);" \n
+                         "_wightPlayer = (load player * 1.3) + (life_carryWeight / life_maxWeight);" \n
+                         "_data = missionNamespace getVariable [_type,[1,0]];" \n
+                         "_lvldist = (_type call life_fnc_getProf) select 0;" \n
+                         "life_stamina_bar = _walked / _lvldist;" \n
+                         "player setCustomAimCoef (1 + _walked / _lvldist * 0.7);"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "Spieler_ist_tot">*/
+                                class Spieler_ist_tot
+                                {
+                                        itemno = 31;
+                                        priority = 5.000000;
+                                        to="Sleeper";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"!(player getVariable [""isAlive"",true]) || !alive player"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                                /*%FSM<LINK "life_prof_noXp">*/
+                                class life_prof_noXp
+                                {
+                                        itemno = 1;
+                                        priority = 4.000000;
+                                        to="exhaust_them__noXp";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"life_prof_noXp"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                                /*%FSM<LINK "life_water_boy">*/
+                                class life_water_boy
+                                {
+                                        itemno = 0;
+                                        priority = 3.000000;
+                                        to="reset_walk";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"life_water_boy"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                                /*%FSM<LINK "vehicle_player">*/
+                                class vehicle_player
+                                {
+                                        itemno = 8;
+                                        priority = 2.000000;
+                                        to="get_stamina_back";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"!isNull objectParent player && _walked > 0"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                                /*%FSM<LINK "fatigue">*/
+                                class fatigue
+                                {
+                                        itemno = 2;
+                                        priority = 1.000000;
+                                        to="add_stamina";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"isNull objectParent player &&" \n
+                                         "isNil ""life_redgull_effect"" && " \n
+                                         "!(player getVariable [""restrained"",false]) &&" \n
+                                         "((getpos player) select 2) < 0.2"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                                /*%FSM<LINK "_">*/
+                                class _
+                                {
+                                        itemno = 20;
+                                        priority = 0.000000;
+                                        to="Sleeper";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "get_stamina_back">*/
+                class get_stamina_back
+                {
+                        name = "get_stamina_back";
+                        itemno = 22;
+                        init = /*%FSM<STATEINIT""">*/"_walked = _walked - 1;"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "_">*/
+                                class _
+                                {
+                                        itemno = 20;
+                                        priority = 0.000000;
+                                        to="Sleeper";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "add_stamina">*/
+                class add_stamina
+                {
+                        name = "add_stamina";
+                        itemno = 23;
+                        init = /*%FSM<STATEINIT""">*/"if (_speed > 10 || _speed < (-9)) then {" \n
+                         "	if (_speed < 0) then {_speed = _speed * (-1);};" \n
+                         "	_walked = _walked  + ((_speed / 3.6) / 2) + (_wightPlayer/0.6);" \n
+                         "};" \n
+                         "" \n
+                         "if (_speed < 10  && _speed >= 0 || _speed > (-9) && _speed <= 0) then {" \n
+                         "	_walked = _walked  - 1.5;	" \n
+                         "	if (_speed == 0) then { _walked = _walked - 2;};" \n
+                         "	if (_walked < 0) then {_walked = 0;};" \n
+                         "};" \n
+                         ""/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "max_reached">*/
+                                class max_reached
+                                {
+                                        itemno = 24;
+                                        priority = 1.000000;
+                                        to="exhaust_them__getXp";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"_walked >= _lvldist"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                                /*%FSM<LINK "_">*/
+                                class _
+                                {
+                                        itemno = 20;
+                                        priority = 0.000000;
+                                        to="Sleeper";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "exhaust_them__getXp">*/
+                class exhaust_them__getXp
+                {
+                        name = "exhaust_them__getXp";
+                        itemno = 25;
+                        init = /*%FSM<STATEINIT""">*/"_walked = 0;" \n
+                         "life_thirst = life_thirst - 2;" \n
+                         "life_hunger = life_hunger - 2;" \n
+                         "_getXp = (round ((random 150) + (_lvldist/1.3)));" \n
+                         "if (life_real_date in (call de100_Dxp_days) || life_admin_moreXp) then {" \n
+                         "	_getXp = _getXp * 2;" \n
+                         "};" \n
+                         "[format[""Du hast %1 Erfahrung erhalten. Deine Ausdauer und Kraft haben sich verbessert. "",_getXp],false,""fast""] call life_fnc_notification_system;" \n
+                         "[_type, _getXp] call life_fnc_addExp;" \n
+                         "[_typeCarry, _getXp] call life_fnc_addExp;" \n
+                         "player enableFatigue true;" \n
+                         "player forceWalk true;" \n
+                         "player setFatigue 1;" \n
+                         "player setCustomAimCoef 8;" \n
+                         "_timer = 0;" \n
+                         "_counter = 0;"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "loop_timer">*/
+                                class loop_timer
+                                {
+                                        itemno = 26;
+                                        priority = 0.000000;
+                                        to="loop_expression_1";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"_counter < 30 && (time - _timer) >= 0.1"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "loop_expression_1">*/
+                class loop_expression_1
+                {
+                        name = "loop_expression_1";
+                        itemno = 27;
+                        init = /*%FSM<STATEINIT""">*/"_counter = _counter + 0.05;" \n
+                         "_timer = time;" \n
+                         "if (getFatigue player != 1) then {player setFatigue 1;};" \n
+                         "life_stamina_bar = 1 - (_counter / 30);"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "loop_exit">*/
+                                class loop_exit
+                                {
+                                        itemno = 28;
+                                        priority = 1.000000;
+                                        to="reset_exhausting";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"_counter >= 30 || !isNil ""life_redgull_effect"" || !alive player"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                                /*%FSM<LINK "loop_timer">*/
+                                class loop_timer
+                                {
+                                        itemno = 26;
+                                        priority = 0.000000;
+                                        to="loop_expression_1";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"_counter < 30 && (time - _timer) >= 0.1"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "END">*/
+                class END
+                {
+                        name = "END";
+                        itemno = 30;
+                        init = /*%FSM<STATEINIT""">*/""/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                        };
+                };
+                /*%FSM</STATE>*/
+        };
+        initState="Start";
+        finalStates[] =
+        {
+                "END",
+        };
+};
+/*%FSM</COMPILE>*/

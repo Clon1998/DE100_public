@@ -1,0 +1,209 @@
+/*%FSM<COMPILE "E:\Program Files (x86)\Steam\steamapps\common\Arma 3 Tools\FSMEditor\scriptedFSM.cfg, Cleanup">*/
+/*%FSM<HEAD>*/
+/*
+item0[] = {"init",0,250,-62.908096,-391.651611,27.091887,-341.651672,0.000000,"init"};
+item1[] = {"wait",4,218,-62.968811,-305.698944,27.031189,-255.698944,0.000000,"wait"};
+item2[] = {"delete",2,4346,-62.508881,-230.198608,27.491135,-180.198608,0.000000,"delete"};
+item3[] = {"End_Cleanup_",1,250,111.193207,-488.007538,201.193420,-438.007355,0.000000,"" \n "End Cleanup" \n ""};
+item4[] = {"Check_for_HC_",4,218,109.984558,-390.548981,199.984589,-340.548981,1.000000,"" \n "Check for HC" \n ""};
+link0[] = {0,1};
+link1[] = {0,4};
+link2[] = {1,2};
+link3[] = {2,1};
+link4[] = {2,4};
+link5[] = {4,3};
+globals[] = {0.000000,0,0,0,0,640,480,1,55,6316128,1,-118.929382,348.929382,-80.159424,-543.302979,618,789,1};
+window[] = {0,-1,-1,-1,-1,1091,130,1494,130,1,636};
+*//*%FSM</HEAD>*/
+class FSM
+{
+        fsmName = "Cleanup";
+        class States
+        {
+                /*%FSM<STATE "init">*/
+                class init
+                {
+                        name = "init";
+                        itemno = 0;
+                        init = /*%FSM<STATEINIT""">*/"private _time = 0;" \n
+                         "private _hlong = 300;" \n
+                         "cleanupFSM setFSMVariable [""stopfsm"",false];" \n
+                         "[""Started HC Side CleanUpFSM""] call A3Log;" \n
+                         "" \n
+                         "private _addZero = {" \n
+                         "	params[" \n
+                         "		[""_number"", 0, [0]]" \n
+                         "	];" \n
+                         "	if (_number < 10) exitWith {" \n
+                         "		format [""0%1"",_number];" \n
+                         "	};" \n
+                         "	_number;" \n
+                         "};"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "Check_for_HC_">*/
+                                class Check_for_HC_
+                                {
+                                        itemno = 4;
+                                        priority = 1.000000;
+                                        to="End_Cleanup_";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"cleanupFSM getFSMVariable ""stopfsm"""/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                                /*%FSM<LINK "wait">*/
+                                class wait
+                                {
+                                        itemno = 1;
+                                        priority = 0.000000;
+                                        to="delete";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"(time - _time) >= _hlong"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/"_time = time;"/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "delete">*/
+                class delete
+                {
+                        name = "delete";
+                        itemno = 2;
+                        init = /*%FSM<STATEINIT""">*/"private _vehicles = vehicles select {getText(configfile >> ""CfgVehicles"" >> (typeOf _x) >> ""vehicleClass"") in [""Car"",""Air"",""Ship"",""Armored"",""Submarine"",""Support""]};" \n
+                         "private _dVid = [];" \n
+                         "private _rVid = [];" \n
+                         "private _logs = [];" \n
+                         "private _shells = [];" \n
+                         "private _vid = -1;" \n
+                         "private _obj = objNull;" \n
+                         "private _mT = if (life_real_Time select 4 < 10) then {" \n
+                         "	parseNumber(format[""%1%2"",((life_real_Time select 3)-1) call _addZero,(50+(life_real_Time select 4)) call _addZero]);" \n
+                         "} else {" \n
+                         "	parseNumber(format[""%1%2"",((life_real_Time select 3)) call _addZero,((life_real_Time select 4)-10) call _addZero]);" \n
+                         "};" \n
+                         "" \n
+                         "{" \n
+                         "    {" \n
+                         "        _shells pushBackUnique _x;" \n
+                         "        nil" \n
+                         "    } count (getPos _x nearObjects [""GrenadeHand"", 100]);" \n
+                         "    nil" \n
+                         "} count allUnits;" \n
+                         "" \n
+                         "if (count _vehicles > 0) then {" \n
+                         "	{" \n
+                         "		if (!isNull _x) then {" \n
+                         "			_obj = _x;" \n
+                         "			_vid = _obj getVariable [""VID"",-1];" \n
+                         "			_owner = _obj getVariable [""owner"",[]];" \n
+                         "			if (alive _obj) then {" \n
+                         "				_cR = ({(vehicle _x) distance _obj < 1000} count allPlayers) == 0 && (count crew _obj) == 0 && (_obj getVariable [""lastTime"",0]) < _mT;" \n
+                         "				if (_cr) then {" \n
+                         "					[_obj] call VEH_fnc_remContainer;" \n
+                         "					deleteVehicle _obj;" \n
+                         "					if (_vid >= 0 && count _owner > 0) then {" \n
+                         "						_rVid pushBackUnique _vid;" \n
+                         "						_logs pushBack [_owner select 0,28,format[""%1(VID: %2) wurde durch das Cleanup in die Garage gestellt, Z-Inv wurde zur?ckgesetzt."",getText(configFile >> ""CfgVehicles"" >> (typeOf _obj) >> ""displayName""),_vid]];" \n
+                         "					};" \n
+                         "				};" \n
+                         "			} else {" \n
+                         "				[_obj] call VEH_fnc_remContainer;" \n
+                         "				deleteVehicle _obj;" \n
+                         "				if (_vid >= 0 && count _owner > 0) then {" \n
+                         "					_dVid pushBackUnique _vid;" \n
+                         "					_logs pushBack [_owner select 0,25,format[""%1(VID: %2) wurde durch das Cleanup gel?scht und ist somit kaputt."",getText(configFile >> ""CfgVehicles"" >> (typeOf _obj) >> ""displayName""),_vid]];" \n
+                         "				};" \n
+                         "			};" \n
+                         "		};" \n
+                         "		nil" \n
+                         "	} count _vehicles;" \n
+                         "	if !(_rVid isEqualTo []) then {" \n
+                         "		[format[""UPDATE vehicles SET active='0',inventory='""""[[],0]""""', coolDown=NOW() WHERE id IN (%1)"",_rVid  joinString "",""],1] call DB_fnc_asyncCall;" \n
+                         "	};" \n
+                         "	if !(_dVid isEqualTo []) then {" \n
+                         "		[format[""UPDATE vehicles SET alive='0' WHERE id IN (%1)"",_dVid joinString "",""],1] call DB_fnc_asyncCall;" \n
+                         "	};" \n
+                         "};" \n
+                         "" \n
+                         "private _things = (allMissionObjects ""Thing"") select {(typeOf _x) in ([""Box_NATO_Equip_F""]+getArray(missionConfigFile >> ""Life_Settings"" >> ""droped_items""))};" \n
+                         "private _weaponHolder = (allMissionObjects ""WeaponHolderSimulated"")+(allMissionObjects ""WeaponHolder"")+(allMissionObjects ""GroundWeaponHolder"");" \n
+                         "" \n
+                         "{" \n
+                         "	if (!isNull _x) then {	 " \n
+                         "		_obj = _x;" \n
+                         "		if (alive _obj) then {" \n
+                         "			_cR = ({(vehicle _x) distance _obj < 500} count allPlayers) == 0;" \n
+                         "			if (_cr) then {" \n
+                         "				deleteVehicle _obj;" \n
+                         "			};" \n
+                         "		} else {" \n
+                         "			deleteVehicle _obj;" \n
+                         "		};" \n
+                         "	};" \n
+                         "	nil" \n
+                         "} count (_things + _weaponHolder + _shells);" \n
+                         "" \n
+                         "private _deadUnits = allDeadMen;" \n
+                         "{" \n
+                         "	if (!isNull _x) then {" \n
+                         "		if (_x getVariable [""isAlive"",true] || (isNil {getPlayerUID _x})) then {" \n
+                         "			deleteVehicle _x;" \n
+                         "		};" \n
+                         "	};" \n
+                         "	nil" \n
+                         "} count _deadUnits;" \n
+                         "" \n
+                         "if (count _logs > 0) then {" \n
+                         "	[""overwrite"", 25, _logs] call MSC_fnc_log;" \n
+                         "};"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "Check_for_HC_">*/
+                                class Check_for_HC_
+                                {
+                                        itemno = 4;
+                                        priority = 1.000000;
+                                        to="End_Cleanup_";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"cleanupFSM getFSMVariable ""stopfsm"""/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                                /*%FSM<LINK "wait">*/
+                                class wait
+                                {
+                                        itemno = 1;
+                                        priority = 0.000000;
+                                        to="delete";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"(time - _time) >= _hlong"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/"_time = time;"/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "End_Cleanup_">*/
+                class End_Cleanup_
+                {
+                        name = "End_Cleanup_";
+                        itemno = 3;
+                        init = /*%FSM<STATEINIT""">*/"[""Stopped Server Side CleanUpFSM""] call A3Log;"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                        };
+                };
+                /*%FSM</STATE>*/
+        };
+        initState="init";
+        finalStates[] =
+        {
+                "End_Cleanup_",
+        };
+};
+/*%FSM</COMPILE>*/

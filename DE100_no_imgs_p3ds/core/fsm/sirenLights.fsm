@@ -1,0 +1,373 @@
+/*%FSM<COMPILE "E:\Program Files (x86)\SteamExtern\steamapps\common\Arma 3 Tools\FSMEditor\scriptedFSM.cfg, SirenLights">*/
+/*%FSM<HEAD>*/
+/*
+item0[] = {"Main_Init",0,4346,-40.348839,-136.547119,49.651161,-86.547104,0.000000,"Main Init"};
+item1[] = {"END",1,250,124.465759,-207.121124,214.465820,-157.121109,0.000000,"END"};
+item2[] = {"END_COND",4,218,121.924179,-136.582336,211.924194,-86.582291,10.000000,"END" \n "COND"};
+item3[] = {"check_Distance",4,218,-39.847534,-54.046341,50.152466,-4.046341,0.000000,"check" \n "Distance"};
+item4[] = {"FlashingL_ON",2,250,-40.059235,42.355392,49.940781,92.355392,0.000000,"FlashingL" \n "ON"};
+item5[] = {"sleep",4,218,-39.045288,123.482407,50.954712,173.482407,0.000000,"sleep"};
+item6[] = {"FlashingL_OFF",2,250,-38.127594,211.296234,51.872421,261.296234,0.000000,"FlashingL" \n "OFF"};
+item7[] = {"",7,210,-144.556503,232.398163,-136.556519,240.398148,0.000000,""};
+item8[] = {"sleep",4,218,-185.397064,42.011276,-95.397079,92.011276,0.000000,"sleep"};
+item9[] = {"",7,210,163.088165,63.344376,171.088165,71.344376,0.000000,""};
+item10[] = {"",7,210,162.970886,232.056305,170.970886,240.056305,0.000000,""};
+item11[] = {"Next_Stage",4,218,-37.864563,301.894684,52.135437,351.894684,1.000000,"Next" \n "Stage"};
+item12[] = {"FlashingR_ON",2,250,-37.908264,392.581543,52.091751,442.581543,0.000000,"FlashingR" \n "ON"};
+item13[] = {"sleep",4,218,-37.332062,475.700745,52.667938,525.701416,0.000000,"sleep"};
+item14[] = {"FlashingR_OFF",2,250,-37.023926,563.946472,52.976089,613.946472,0.000000,"FlashingR" \n "OFF"};
+item15[] = {"sleep",4,218,-186.959625,392.195465,-96.959625,442.195221,0.000000,"sleep"};
+item16[] = {"",7,210,-145.910339,585.479370,-137.910355,593.479370,0.000000,""};
+item17[] = {"",7,210,163.940186,585.184387,171.940186,593.184387,0.000000,""};
+item18[] = {"",7,210,163.506958,415.573883,171.506958,423.573914,0.000000,""};
+item19[] = {"Back_Step",4,218,-37.350281,639.927429,52.649719,689.927429,1.000000,"Back" \n "Step"};
+item20[] = {"",7,210,204.172729,660.682190,212.172729,668.682190,0.000000,""};
+item21[] = {"",7,210,203.294922,63.180023,211.294922,71.180099,0.000000,""};
+item22[] = {"Dedicated__or_HC",4,218,-36.385986,-206.610901,53.614014,-156.610886,11.000000,"Dedicated " \n "or HC"};
+link0[] = {0,2};
+link1[] = {0,3};
+link2[] = {0,22};
+link3[] = {2,1};
+link4[] = {3,4};
+link5[] = {4,5};
+link6[] = {4,9};
+link7[] = {5,6};
+link8[] = {6,7};
+link9[] = {6,10};
+link10[] = {6,11};
+link11[] = {7,8};
+link12[] = {8,4};
+link13[] = {9,2};
+link14[] = {10,9};
+link15[] = {11,12};
+link16[] = {12,13};
+link17[] = {12,18};
+link18[] = {13,14};
+link19[] = {14,16};
+link20[] = {14,17};
+link21[] = {14,19};
+link22[] = {15,12};
+link23[] = {16,15};
+link24[] = {17,18};
+link25[] = {18,10};
+link26[] = {19,20};
+link27[] = {20,21};
+link28[] = {21,4};
+link29[] = {22,1};
+globals[] = {0.000000,0,0,0,0,640,480,1,49,6316128,1,-901.044006,777.546692,816.040283,-128.255035,1191,670,1};
+window[] = {0,-1,-1,-1,-1,934,73,1754,92,1,1209};
+*//*%FSM</HEAD>*/
+class FSM
+{
+        fsmName = "SirenLights";
+        class States
+        {
+                /*%FSM<STATE "Main_Init">*/
+                class Main_Init
+                {
+                        name = "Main_Init";
+                        itemno = 0;
+                        init = /*%FSM<STATEINIT""">*/"params[" \n
+                         "	[""_object"", objNull, [objNull]]," \n
+                         "	[""_side"", sideUnknown, [sideUnknown]]," \n
+                         "	""_brightnessLow""," \n
+                         "	""_brightnessHigh""," \n
+                         "	""_attenuation""," \n
+                         "	""_light""" \n
+                         "];" \n
+                         "_object setVariable [""sirenLights"",true];" \n
+                         "" \n
+                         "if (sunOrMoon < 1) then" \n
+                         "{" \n
+                         "    _brightnessLow = 0;" \n
+                         "    _brightnessHigh = 5;" \n
+                         "    _attenuation = [0.001, 3000, 0, 125000];" \n
+                         "} else {" \n
+                         "    _brightnessLow = 0;" \n
+                         "    _brightnessHigh = 60;" \n
+                         "    _attenuation = [0.001, 3000, 0, 500000];" \n
+                         "};" \n
+                         "" \n
+                         "private _lightColors = switch (_side) do {" \n
+                         "	case west: {[[0, 0, 255],[255, 255, 255]];};" \n
+                         "	case independent: {[[255, 255, 0],[255, 0, 0]];};" \n
+                         "};" \n
+                         "" \n
+                         "private _lights = getArray(missionConfigFile >> ""lifeVehicles"" >> (typeOf _object) >> ""sirenLights"");" \n
+                         "private _leftLights = [];" \n
+                         "private _rightLights = [];" \n
+                         "" \n
+                         "{" \n
+                         "   _light = ""#lightpoint"" createVehicleLocal [0,0,0];" \n
+                         "   _light setLightBrightness 0;" \n
+                         "   _light setLightAmbient [0,0,0];" \n
+                         "   _light setLightAttenuation _attenuation;" \n
+                         "   _light setLightIntensity 1000;" \n
+                         "   _light setLightFlareSize 1;" \n
+                         "   _light setLightFlareMaxDistance 150;" \n
+                         "   _light setLightUseFlare true;" \n
+                         "   _light setLightDayLight true;" \n
+                         "	if (_x select 1 == 1) then {" \n
+                         "		_light setLightColor (_lightColors select 0);" \n
+                         "	} else {" \n
+                         "		_light setLightColor (_lightColors select 1);" \n
+                         "	};" \n
+                         "" \n
+                         "	if (_x select 0 == 0) then {" \n
+                         "		_leftLights pushBackUnique _light;" \n
+                         "	} else {" \n
+                         "		_rightLights pushBackUnique _light;" \n
+                         "	};" \n
+                         "" \n
+                         "    _light lightAttachObject [_object, _x select 2];" \n
+                         "} foreach _lights;" \n
+                         "private _counter = 0;" \n
+                         "private _timer = time;"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "Dedicated__or_HC">*/
+                                class Dedicated__or_HC
+                                {
+                                        itemno = 22;
+                                        priority = 11.000000;
+                                        to="END";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"!hasInterface"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                                /*%FSM<LINK "END_COND">*/
+                                class END_COND
+                                {
+                                        itemno = 2;
+                                        priority = 10.000000;
+                                        to="END";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"!alive _object || !(_object getVariable [""sirenLights"",false])"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                                /*%FSM<LINK "check_Distance">*/
+                                class check_Distance
+                                {
+                                        itemno = 3;
+                                        priority = 0.000000;
+                                        to="FlashingL_ON";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"player distance _object <= 1000"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "END">*/
+                class END
+                {
+                        name = "END";
+                        itemno = 1;
+                        init = /*%FSM<STATEINIT""">*/"{ deleteVehicle _x } forEach (_leftLights+_rightLights);"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "FlashingL_ON">*/
+                class FlashingL_ON
+                {
+                        name = "FlashingL_ON";
+                        itemno = 4;
+                        init = /*%FSM<STATEINIT""">*/"{" \n
+                         "	_x setLightBrightness _brightnessHigh;" \n
+                         "} foreach _leftLights;" \n
+                         "_timer = time;"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "END_COND">*/
+                                class END_COND
+                                {
+                                        itemno = 2;
+                                        priority = 10.000000;
+                                        to="END";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"!alive _object || !(_object getVariable [""sirenLights"",false])"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                                /*%FSM<LINK "sleep">*/
+                                class sleep
+                                {
+                                        itemno = 5;
+                                        priority = 0.000000;
+                                        to="FlashingL_OFF";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"(time - _timer) >= 0.1"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "FlashingL_OFF">*/
+                class FlashingL_OFF
+                {
+                        name = "FlashingL_OFF";
+                        itemno = 6;
+                        init = /*%FSM<STATEINIT""">*/"{" \n
+                         "	_x setLightBrightness _brightnessLow;" \n
+                         "} foreach _leftLights;" \n
+                         "_timer = time;" \n
+                         "_counter = _counter + 1;"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "END_COND">*/
+                                class END_COND
+                                {
+                                        itemno = 2;
+                                        priority = 10.000000;
+                                        to="END";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"!alive _object || !(_object getVariable [""sirenLights"",false])"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                                /*%FSM<LINK "Next_Stage">*/
+                                class Next_Stage
+                                {
+                                        itemno = 11;
+                                        priority = 1.000000;
+                                        to="FlashingR_ON";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"(time - _timer) >= 0.05 && _counter >= 3"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/"{" \n
+                                         "	_x setLightBrightness 0;" \n
+                                         "} foreach _leftLights;" \n
+                                         "_counter = 0;"/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                                /*%FSM<LINK "sleep">*/
+                                class sleep
+                                {
+                                        itemno = 8;
+                                        priority = 0.000000;
+                                        to="FlashingL_ON";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"(time - _timer) >= 0.05"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "FlashingR_ON">*/
+                class FlashingR_ON
+                {
+                        name = "FlashingR_ON";
+                        itemno = 12;
+                        init = /*%FSM<STATEINIT""">*/"{" \n
+                         "	_x setLightBrightness _brightnessHigh;" \n
+                         "} foreach _rightLights;" \n
+                         "_timer = time;"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "END_COND">*/
+                                class END_COND
+                                {
+                                        itemno = 2;
+                                        priority = 10.000000;
+                                        to="END";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"!alive _object || !(_object getVariable [""sirenLights"",false])"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                                /*%FSM<LINK "sleep">*/
+                                class sleep
+                                {
+                                        itemno = 13;
+                                        priority = 0.000000;
+                                        to="FlashingR_OFF";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"(time - _timer) >= 0.1"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "FlashingR_OFF">*/
+                class FlashingR_OFF
+                {
+                        name = "FlashingR_OFF";
+                        itemno = 14;
+                        init = /*%FSM<STATEINIT""">*/"{" \n
+                         "	_x setLightBrightness _brightnessLow;" \n
+                         "} foreach _rightLights;" \n
+                         "_timer = time;" \n
+                         "_counter = _counter + 1;"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "END_COND">*/
+                                class END_COND
+                                {
+                                        itemno = 2;
+                                        priority = 10.000000;
+                                        to="END";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"!alive _object || !(_object getVariable [""sirenLights"",false])"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                                /*%FSM<LINK "Back_Step">*/
+                                class Back_Step
+                                {
+                                        itemno = 19;
+                                        priority = 1.000000;
+                                        to="FlashingL_ON";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"(time - _timer) >= 0.05 && _counter >= 3 && player distance _object <= 1000"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/"{" \n
+                                         "	_x setLightBrightness 0;" \n
+                                         "} foreach _rightLights;" \n
+                                         "_counter = 0;" \n
+                                         "" \n
+                                         "if (sunOrMoon < 1) then" \n
+                                         "{" \n
+                                         "    _brightnessLow = 0;" \n
+                                         "    _brightnessHigh = 5;" \n
+                                         "    _attenuation = [0.001, 3000, 0, 125000];" \n
+                                         "} else {" \n
+                                         "    _brightnessLow = 0;" \n
+                                         "    _brightnessHigh = 60;" \n
+                                         "    _attenuation = [0.001, 3000, 0, 500000];" \n
+                                         "};"/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                                /*%FSM<LINK "sleep">*/
+                                class sleep
+                                {
+                                        itemno = 15;
+                                        priority = 0.000000;
+                                        to="FlashingR_ON";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"(time - _timer) >= 0.05  && _counter < 3"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+        };
+        initState="Main_Init";
+        finalStates[] =
+        {
+                "END",
+        };
+};
+/*%FSM</COMPILE>*/

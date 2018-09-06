@@ -1,0 +1,126 @@
+/*%FSM<COMPILE "E:\Program Files (x86)\Steam\steamapps\common\Arma 3 Tools\FSMEditor\scriptedFSM.cfg, Lucian-De100-RealTime">*/
+/*%FSM<HEAD>*/
+/*
+item0[] = {"Main_Init",0,4346,-40.348839,-141.279068,49.651161,-91.279068,0.000000,"Main Init"};
+item1[] = {"true",8,218,-39.994308,-65.712906,50.005692,-15.712896,0.000000,"true"};
+item2[] = {"Make_it_PUBLIC",2,250,-39.994308,10.874098,50.005707,60.874100,0.000000,"Make it PUBLIC"};
+item3[] = {"",7,210,-233.614594,295.445374,-225.614578,303.445374,0.000000,""};
+item4[] = {"",7,210,-233.935593,31.234837,-225.935593,39.234840,0.000000,""};
+item5[] = {"Wait_1_Minute",4,218,-38.539185,92.835747,51.460873,142.835785,0.000000,"Wait 1 Minute"};
+item6[] = {"Update_Time_",2,250,-36.888039,178.612518,53.111916,228.612396,0.000000,"Update Time" \n ""};
+item7[] = {"true",8,218,-36.716774,275.104858,53.283058,325.104889,0.000000,"true"};
+link0[] = {0,1};
+link1[] = {1,2};
+link2[] = {2,5};
+link3[] = {3,4};
+link4[] = {4,2};
+link5[] = {5,6};
+link6[] = {6,7};
+link7[] = {7,3};
+globals[] = {0.000000,0,0,0,0,640,480,1,26,6316128,1,-364.209686,266.074158,354.949310,-231.546356,696,646,1};
+window[] = {0,-1,-1,-1,-1,1052,234,1674,234,1,714};
+*//*%FSM</HEAD>*/
+class FSM
+{
+        fsmName = "Lucian-De100-RealTime";
+        class States
+        {
+                /*%FSM<STATE "Main_Init">*/
+                class Main_Init
+                {
+                        name = "Main_Init";
+                        itemno = 0;
+                        init = /*%FSM<STATEINIT""">*/"private[""_lastcheck"",""_hr"",""_mnt"",""_smarty"",""_day"",""_mnth""];" \n
+                         "_lastcheck = time;" \n
+                         "_smarty = ""extDB3"" callExtension ""9:LOCAL_TIME"";" \n
+                         "life_real_time = parseSimpleArray (_smarty) select 1;" \n
+                         "_day = if (life_real_time select 2 < 10) then {format [""0%1"",life_real_time select 2]} else {life_real_time select 2};" \n
+                         "_mnth = life_real_time select 1;" \n
+                         "life_real_date = parseNumber (format[""%1%2"",_mnth,_day]);" \n
+                         "publicVariable ""life_real_date"";" \n
+                         "_hr = (life_real_time select 3);" \n
+                         "_mnt = life_real_time select 4;" \n
+                         "if (_hr == 24) then {_hr = 00};" \n
+                         "life_real_time set [3,_hr];" \n
+                         "" \n
+                         "[""Started HeadlessClint Side RealTimeFSM""] call A3Log;"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "true">*/
+                                class true
+                                {
+                                        itemno = 1;
+                                        priority = 0.000000;
+                                        to="Make_it_PUBLIC";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"true"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "Make_it_PUBLIC">*/
+                class Make_it_PUBLIC
+                {
+                        name = "Make_it_PUBLIC";
+                        itemno = 2;
+                        init = /*%FSM<STATEINIT""">*/"publicVariable ""life_real_time"";"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "Wait_1_Minute">*/
+                                class Wait_1_Minute
+                                {
+                                        itemno = 5;
+                                        priority = 0.000000;
+                                        to="Update_Time_";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"(time - _lastcheck) >= (60)"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "Update_Time_">*/
+                class Update_Time_
+                {
+                        name = "Update_Time_";
+                        itemno = 6;
+                        init = /*%FSM<STATEINIT""">*/"_lastcheck = time;" \n
+                         "_mnt = _mnt + 1;" \n
+                         "if (_mnt >= 60 || _mnt == 30 || _mnt == 45 || _mnt == 15) then {" \n
+                         "	_smarty = ""extDB3"" callExtension ""9:LOCAL_TIME"";" \n
+                         "	life_real_time = parseSimpleArray (_smarty) select 1;" \n
+                         "	_hr = (life_real_time select 3);" \n
+                         "	if (_hr == 24) then {_hr = 00};" \n
+                         "	_mnt = life_real_time select 4;" \n
+                         "};" \n
+                         "life_real_time set [3,_hr];" \n
+                         "life_real_time set [4,_mnt];"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "true">*/
+                                class true
+                                {
+                                        itemno = 7;
+                                        priority = 0.000000;
+                                        to="Make_it_PUBLIC";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"true"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+        };
+        initState="Main_Init";
+        finalStates[] =
+        {
+        };
+};
+/*%FSM</COMPILE>*/

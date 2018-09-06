@@ -1,0 +1,114 @@
+/*%FSM<COMPILE "E:\Program Files (x86)\SteamExtern\steamapps\common\Arma 3 Tools\FSMEditor\scriptedFSM.cfg, DE100 Dealer handler">*/
+/*%FSM<HEAD>*/
+/*
+item0[] = {"Start",0,250,-40.348839,-141.279068,49.651161,-91.279068,0.000000,"Start"};
+item1[] = {"_",8,218,-40.214478,-70.638298,49.785522,-20.638298,0.000000,""};
+item2[] = {"SetPos",2,250,-40.220047,10.613785,49.779968,60.613785,0.000000,"SetPos"};
+item3[] = {"timer",4,218,-40.147392,96.483757,49.852608,146.483688,0.000000,"timer"};
+item4[] = {"remove_old_Deale",2,250,-168.043335,96.615662,-78.043312,146.615662,0.000000,"remove old" \n "Dealer"};
+item5[] = {"_",8,218,-168.193604,10.556931,-78.193588,60.556931,0.000000,""};
+link0[] = {0,1};
+link1[] = {1,2};
+link2[] = {2,3};
+link3[] = {3,4};
+link4[] = {4,5};
+link5[] = {5,2};
+globals[] = {0.000000,0,0,0,0,640,480,1,35,6316128,1,-325.520477,243.919495,262.785797,-268.210999,948,884,1};
+window[] = {2,-1,-1,-1,-1,1017,2128,3568,208,3,966};
+*//*%FSM</HEAD>*/
+class FSM
+{
+        fsmName = "DE100 Dealer handler";
+        class States
+        {
+                /*%FSM<STATE "Start">*/
+                class Start
+                {
+                        name = "Start";
+                        itemno = 0;
+                        init = /*%FSM<STATEINIT""">*/"_dealerCfg = _this;" \n
+                         "_randomArray = [];"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "_">*/
+                                class _
+                                {
+                                        itemno = 1;
+                                        priority = 0.000000;
+                                        to="SetPos";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"true"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "SetPos">*/
+                class SetPos
+                {
+                        name = "SetPos";
+                        itemno = 2;
+                        init = /*%FSM<STATEINIT""">*/"_randomArray = selectRandom ((_dealerCfg select 1) - [_randomArray]);" \n
+                         "_sign = ""Land_InfoStand_V2_F"" createVehicle (_randomArray select 0);" \n
+                         "_sign setdir (_randomArray select 1);" \n
+                         "_sign allowDamage false;" \n
+                         "_sign setVariable[""realname"",""Drogen Dealer"",true];" \n
+                         "[0, _sign] remoteExecCall [""life_fnc_dealerAddaction"",-2];" \n
+                         "_timer = time + random (800) + 1200;" \n
+                         "_marker = createMarker [format [""Marker_%1"",_dealerCfg select 0],  getPos _sign];" \n
+                         "_marker setMarkerType ""n_mech_inf"";" \n
+                         "_marker setMarkerColor ""ColorEAST"";" \n
+                         "DealerMarkers pushBack [_sign,_timer,_marker];" \n
+                         "publicVariable ""DealerMarkers"";"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "timer">*/
+                                class timer
+                                {
+                                        itemno = 3;
+                                        priority = 0.000000;
+                                        to="remove_old_Deale";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"(_timer - time) <= 0"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "remove_old_Deale">*/
+                class remove_old_Deale
+                {
+                        name = "remove_old_Deale";
+                        itemno = 4;
+                        init = /*%FSM<STATEINIT""">*/"DealerMarkers = DealerMarkers - [[_sign,_timer,_marker]];" \n
+                         "publicVariable ""DealerMarkers"";" \n
+                         "deleteVehicle _sign;" \n
+                         "deleteMarker _marker"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "_">*/
+                                class _
+                                {
+                                        itemno = 5;
+                                        priority = 0.000000;
+                                        to="SetPos";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+        };
+        initState="Start";
+        finalStates[] =
+        {
+        };
+};
+/*%FSM</COMPILE>*/

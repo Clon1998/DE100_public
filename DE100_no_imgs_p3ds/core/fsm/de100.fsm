@@ -1,0 +1,147 @@
+/*%FSM<COMPILE "E:\Program Files (x86)\Steam\steamapps\common\Arma 3 Tools\FSMEditor\scriptedFSM.cfg, Life Client FSM">*/
+/*%FSM<HEAD>*/
+/*
+item0[] = {"Main_Init",0,4346,-40.348839,-141.279068,49.651161,-91.279068,0.000000,"Main Init"};
+item1[] = {"true",8,218,-39.994308,-65.712906,50.005692,-15.712896,0.000000,"true"};
+item2[] = {"Split",2,250,-39.994308,10.874098,50.005707,60.874100,0.000000,"Split"};
+item3[] = {"",7,210,-233.614594,295.445374,-225.614578,303.445374,0.000000,""};
+item4[] = {"",7,210,-233.935593,31.234837,-225.935593,39.234840,0.000000,""};
+item5[] = {"Time_to_pay_",4,218,-38.539185,92.835747,51.460873,142.835785,0.000000,"Time to pay?"};
+item6[] = {"Pay_me_",2,250,-36.888039,178.612518,53.111916,228.612396,0.000000,"Pay me!"};
+item7[] = {"true",8,218,-36.716774,275.104858,53.283058,325.104889,0.000000,"true"};
+link0[] = {0,1};
+link1[] = {1,2};
+link2[] = {2,5};
+link3[] = {3,4};
+link4[] = {4,2};
+link5[] = {5,6};
+link6[] = {6,7};
+link7[] = {7,3};
+globals[] = {0.000000,0,0,0,0,640,480,1,26,6316128,1,-332.038574,482.227173,379.837494,-151.171021,563,646,1};
+window[] = {0,-1,-1,-1,-1,844,26,1707,26,1,581};
+*//*%FSM</HEAD>*/
+class FSM
+{
+        fsmName = "Life Client FSM";
+        class States
+        {
+                /*%FSM<STATE "Main_Init">*/
+                class Main_Init
+                {
+                        name = "Main_Init";
+                        itemno = 0;
+                        init = /*%FSM<STATEINIT""">*/"private[""_lastcheck"",""_life_paycheck"",""_life_paycheck_multiplier"",""_lastPos""];" \n
+                         "_lastcheck = time;" \n
+                         "_lastPos = getPos player;" \n
+                         "" \n
+                         "private _profs = ""getText(_x >> 'flag') isEqualTo 'civ' && getText(_x >> 'skilltype') isEqualTo 'Process'"" configClasses (missionConfigFile >> ""ProfSys"");" \n
+                         "private _Achivments = ""getText(_x >> 'side') isEqualTo 'civ' && !(getText(_x >> 'variable') isEqualTo '')"" configClasses (missionConfigFile >> ""Achievements"");" \n
+                         "" \n
+                         "switch (playerSide) do" \n
+                         "{" \n
+                         "	case west: " \n
+                         "	{" \n
+                         "		_life_paycheck = (13-(call life_coplevel)) * 515; //Paycheck Amount" \n
+                         "	};" \n
+                         "	case civilian: " \n
+                         "	{" \n
+                         "		_life_paycheck_multiplier = 25; //Paycheck Amount" \n
+                         "	};	" \n
+                         "	case independent: {" \n
+                         "		_life_paycheck = 10000;" \n
+                         "	};" \n
+                         "};"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "true">*/
+                                class true
+                                {
+                                        itemno = 1;
+                                        priority = 0.000000;
+                                        to="Split";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"true"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "Split">*/
+                class Split
+                {
+                        name = "Split";
+                        itemno = 2;
+                        init = /*%FSM<STATEINIT""">*/"systemChat format[localize ""STR_FSM_Paycheck"",(call life_paycheck_period)];"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "Time_to_pay_">*/
+                                class Time_to_pay_
+                                {
+                                        itemno = 5;
+                                        priority = 0.000000;
+                                        to="Pay_me_";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/"(time - _lastcheck) > ((call life_paycheck_period) * 60)"/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+                /*%FSM<STATE "Pay_me_">*/
+                class Pay_me_
+                {
+                        name = "Pay_me_";
+                        itemno = 6;
+                        init = /*%FSM<STATEINIT""">*/"if(!alive player || _lastPos isEqualTo (getPos player)) then {" \n
+                         "	systemChat localize ""STR_FSM_MissedPay"";" \n
+                         "} else {" \n
+                         "	if(playerSide isEqualTo civilian) then {" \n
+                         "		_life_paycheck = 0;" \n
+                         "		{" \n
+                         "			private _variable = getText(_x  >> ""variable"");" \n
+                         "			private _data = missionNamespace getVariable [(_variable),[0,0]];" \n
+                         "			_life_paycheck = _life_paycheck + (_life_paycheck_multiplier * ((_data select 0)+1));" \n
+                         "		} forEach _profs;" \n
+                         "" \n
+                         "		{" \n
+                         "			private _variable = getText(_x  >> ""variable"");" \n
+                         "			private _data = missionNamespace getVariable [(_variable),[0,0]];" \n
+                         "			_life_paycheck = _life_paycheck + ((_life_paycheck_multiplier *2) * (_data select 1));" \n
+                         "		} forEach _Achivments;" \n
+                         "	};" \n
+                         "	de100_mSpace setVariable [""cT"",diag_tickTime];" \n
+                         "	de100_luciandjuli_bc = de100_luciandjuli_bc + _life_paycheck;" \n
+                         "	de100_mSpace setVariable [""cV"",de100_luciandjuli_mula+de100_luciandjuli_bc];" \n
+                         "	systemChat format[localize ""STR_FSM_ReceivedPay"",[_life_paycheck] call life_fnc_numberText];" \n
+                         "	[""CASH""] call SOCK_fnc_updatePartial;" \n
+                         "};" \n
+                         "_lastPos = getPos player;" \n
+                         "_lastcheck = time;"/*%FSM</STATEINIT""">*/;
+                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+                        class Links
+                        {
+                                /*%FSM<LINK "true">*/
+                                class true
+                                {
+                                        itemno = 7;
+                                        priority = 0.000000;
+                                        to="Split";
+                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+                                        condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+                                };
+                                /*%FSM</LINK>*/
+                        };
+                };
+                /*%FSM</STATE>*/
+        };
+        initState="Main_Init";
+        finalStates[] =
+        {
+        };
+};
+/*%FSM</COMPILE>*/
