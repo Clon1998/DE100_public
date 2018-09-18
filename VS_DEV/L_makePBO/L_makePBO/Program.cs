@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using System.Collections;
 
 namespace L_makePBO
 {
@@ -22,8 +23,9 @@ namespace L_makePBO
             write("Obfuscator Vorgang wird gestartet.", "green");
             write("Mit Enter bestätigen.", "", true);
 
-            Obfuscator obfu = new Obfuscator(missionPath);
-
+            MacroHandler macroHandler = new MacroHandler();
+            Obfuscator obfu = new Obfuscator(missionPath,macroHandler);
+            
             foreach (string file in Directory.GetFiles(missionPath, "*", SearchOption.AllDirectories))
             {
                 obfu.obfuFile(file);
@@ -180,9 +182,10 @@ namespace L_makePBO
         public string missionName;
         public string obfuPath;
         public string obfuName;
-
-        public Obfuscator(string arg)
+        private MacroHandler macroHandler;
+        public Obfuscator(string arg, MacroHandler macroHandler)
         {
+            this.macroHandler = macroHandler;
             missionPath = arg;
             missionName = Path.GetFileName(arg);
             obfuPath = Directory.GetParent(missionPath).FullName + "\\" + missionName + "_Obfu";
@@ -235,11 +238,10 @@ namespace L_makePBO
             var lineComments = @"//(.*?)\r?\n";
             var strings = @"""((\\[^\n]|[^""\n])*)""";
             var verbatimStrings = @"@(""[^""]*"")+";
-            StreamReader reader = new StreamReader(file);
             StreamWriter writer = new StreamWriter(oFile);
-            string input = reader.ReadToEnd();
-            input += "\n";
-            reader.Close();
+
+            string input = macroHandler.InsertMacros(file);
+            //schnittstelle für MACRO!
 
             string edited = Regex.Replace(input,
                 blockComments + "|" + lineComments + "|" + strings + "|" + verbatimStrings,
