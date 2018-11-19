@@ -1,7 +1,0 @@
-C:\Users\pspat\Documents\Arma Dev\de100\vs_dev\L_makePBO\L_makePBO\bin\Release\L_makePBO.exe.config
-C:\Users\pspat\Documents\Arma Dev\de100\vs_dev\L_makePBO\L_makePBO\bin\Release\L_makePBO.exe
-C:\Users\pspat\Documents\Arma Dev\de100\vs_dev\L_makePBO\L_makePBO\bin\Release\L_makePBO.pdb
-C:\Users\pspat\Documents\Arma Dev\de100\vs_dev\L_makePBO\L_makePBO\obj\Release\L_makePBO.csproj.CoreCompileInputs.cache
-C:\Users\pspat\Documents\Arma Dev\de100\vs_dev\L_makePBO\L_makePBO\obj\Release\L_makePBO.exe
-C:\Users\pspat\Documents\Arma Dev\de100\vs_dev\L_makePBO\L_makePBO\obj\Release\L_makePBO.pdb
-C:\Users\pspat\Documents\Arma Dev\de100\vs_dev\L_makePBO\L_makePBO\obj\Release\L_makePBO.csprojAssemblyReference.cache

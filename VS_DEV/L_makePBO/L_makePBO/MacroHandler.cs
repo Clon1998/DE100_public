@@ -19,12 +19,14 @@ namespace L_makePBO
 
         
         /**
-         *  Scan for Makros
+         *  Scan for all Includes and afterwards for the Macros. 
+         *  It stores them in the storedMacro field.
+         *  It Scans Recursive trough all Includes 
+         *  we might have in the include files.
          */
         private void Scan(string file, string input)
         {
             string[] parrentIncludes = FindIncludes(file, input);
-
 
             for (int i = 0; i < parrentIncludes.Length; i++)
             {
@@ -34,16 +36,17 @@ namespace L_makePBO
                 reader.Close();
                 Scan(parrentIncludes[i], inputTmp);
             }
-
             FindMacros(input);
         }
 
+        /**
+        * FindIncludes, findes all Files/Paths to the Files which 
+        * get included trough #include 'path' in the arma 3 File.
+        * 
+        **/
         private string[] FindIncludes(string file, string input)
         {
             string fDir = Path.GetDirectoryName(file);
-            /**
-             * ToDo: read the file Data^^
-             */
 
             string patternIncludes = @"(#include)\s+\""(.*?\\?([A-z0-9]+.hpp))\""";
             string patternFolderDepth = @"..\\";
@@ -68,7 +71,10 @@ namespace L_makePBO
             }
             return includes.ToArray();
         }
-
+        /**
+         * Find the Macros which are defined trogh #define MACRO CODE
+         * and stores them in our MakroStorage
+         **/
         private void FindMacros(string input)
         {
             string pattern = @"#define\s+([A-z0-9]+)\(?([A-z0-9,]+)?\)?\s+(.*)\r?";
@@ -85,8 +91,11 @@ namespace L_makePBO
             }
             storedMacros.CheckInternalMacros();
         }
-
-        public string InsertMacros(string file)
+        /**
+         * Does the Work for us.
+         * So it basically starts the Macro Replacement.
+         **/
+        public string HandleMacros(string file)
         {
             StreamReader reader = new StreamReader(file);
             string input = reader.ReadToEnd();
@@ -94,7 +103,7 @@ namespace L_makePBO
             reader.Close();
 
             Scan(file, input);
-
+            // This part actually replaces the Macros with the Code of the Macros
             foreach (KeyValuePair<string, A3Macro> entry in storedMacros)
             {
                 if (Regex.IsMatch(input,@"\b"+Regex.Escape(entry.Key)))

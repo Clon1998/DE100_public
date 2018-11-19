@@ -43,8 +43,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="A3Macro.cs" />
+    <Compile Include="Crypt.cs" />
     <Compile Include="MacroHandler.cs" />
     <Compile Include="MacroStorage.cs" />
+    <Compile Include="Obfuscator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

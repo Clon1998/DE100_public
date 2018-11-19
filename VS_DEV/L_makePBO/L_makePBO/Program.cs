@@ -23,13 +23,9 @@ namespace L_makePBO
             write("Obfuscator Vorgang wird gestartet.", "green");
             write("Mit Enter bestätigen.", "", true);
 
-            MacroHandler macroHandler = new MacroHandler();
-            Obfuscator obfu = new Obfuscator(missionPath,macroHandler);
-            
-            foreach (string file in Directory.GetFiles(missionPath, "*", SearchOption.AllDirectories))
-            {
-                obfu.obfuFile(file);
-            }
+            Obfuscator obfuscator = new Obfuscator(missionPath);
+
+            obfuscator.Obfuscate(Directory.GetFiles(missionPath, "*", SearchOption.AllDirectories));
 
             write("Obfuscator Vorgang abgeschlossen", "green");
             write("Mit Enter bestätigen.", "", true);
@@ -39,7 +35,7 @@ namespace L_makePBO
 
             Crypt crypt = new Crypt(decryptPath);
             StreamReader cfgReader = new StreamReader(missionPath+"\\cfgs\\cfg_Functions.hpp");
-            StreamWriter cfgWriter = new StreamWriter(obfu.obfuPath+"\\cfgs\\cfg_crypt.hpp");
+            StreamWriter cfgWriter = new StreamWriter(obfuscator.obfuPath+"\\cfgs\\cfg_crypt.hpp");
             cfgWriter.WriteLine("class LucianCryptSys {");
             string line;
             string tag = "";
@@ -63,11 +59,11 @@ namespace L_makePBO
                     try
                     {
 
-                        write(obfu.obfuPath + "\\" + fileP + "\\fn_" + crntClass + ".sqf" + " wird versucht umzuwandeln");
+                        write(obfuscator.obfuPath + "\\" + fileP + "\\fn_" + crntClass + ".sqf" + " wird versucht umzuwandeln");
                         cfgWriter.WriteLine("\tclass " + crntClass + " {");
-                        cfgWriter.WriteLine("\t\ttag = \"" + tag + "\";\n\t\tcrypted = \"" + fileP + "\\" + crypt.crpytSqf(obfu.obfuPath + "\\" + fileP + "\\fn_" + crntClass + ".sqf") + "\";");
+                        cfgWriter.WriteLine("\t\ttag = \"" + tag + "\";\n\t\tcrypted = \"" + fileP + "\\" + crypt.crpytSqf(obfuscator.obfuPath + "\\" + fileP + "\\fn_" + crntClass + ".sqf") + "\";");
                         cfgWriter.WriteLine("\t};");
-                        write(obfu.obfuPath + "\\" + fileP + "\\fn_" + crntClass + ".sqf" + " wurde umgewandelt");
+                        write(obfuscator.obfuPath + "\\" + fileP + "\\fn_" + crntClass + ".sqf" + " wurde umgewandelt");
                         continue;
                     }
                     catch (Exception e)
@@ -105,7 +101,7 @@ namespace L_makePBO
             cfgWriter.WriteLine("};");
             cfgWriter.Close();
             cfgReader.Close();
-            StreamWriter fncWriter = new StreamWriter(obfu.obfuPath + "\\cfgs\\cfg_Functions.hpp");
+            StreamWriter fncWriter = new StreamWriter(obfuscator.obfuPath + "\\cfgs\\cfg_Functions.hpp");
             fncWriter.WriteLine("#include \"cfg_crypt.hpp\"");
             fncWriter.WriteLine("class CfgFunctions {\n\tclass Life_Client_Core {\n\t\ttag = \"life\";\n\t\tclass Functions {\n\t\t\tfile = \"core\\functions\";\n\t\t\tclass deCrypt {preInit = 1;};\n\t\t};\n\t};\n};");
             fncWriter.Close();
@@ -154,9 +150,9 @@ namespace L_makePBO
 
         static void checkArgs(string[] args)
         {
-            if (args.Length != 3)
-            {
-                exit("3 Parameter erwartet, " + args.Length + " erhalten");
+            if (args.Length < 3)
+            {   
+                exit("3 Parameter erwartet, " + args.Length + " erhalten. Erhaltene Parameter:"+String.Join(",",args));
             }
 
             if (!Directory.Exists(args[0]))
@@ -173,163 +169,6 @@ namespace L_makePBO
             {
                 exit("Die makePbo.exe konnte nicht gefunden werden");
             }
-        }
-    }
-
-    class Obfuscator
-    {
-        public string missionPath;
-        public string missionName;
-        public string obfuPath;
-        public string obfuName;
-        private MacroHandler macroHandler;
-        public Obfuscator(string arg, MacroHandler macroHandler)
-        {
-            this.macroHandler = macroHandler;
-            missionPath = arg;
-            missionName = Path.GetFileName(arg);
-            obfuPath = Directory.GetParent(missionPath).FullName + "\\" + missionName + "_Obfu";
-            obfuName = missionName + "_Obfu";
-            if (Directory.Exists(obfuPath))
-            {
-                Directory.Delete(obfuPath, true);
-            }
-            Directory.CreateDirectory(obfuPath);
-        }
-
-        public bool obfuFile(string file)
-        {
-            string fName = Path.GetFileNameWithoutExtension(file);
-            string fExt = Path.GetExtension(file);
-            string fPath = Path.GetDirectoryName(file);
-
-            string oPath = fPath.Replace(missionName, obfuName);
-            string oFile = oPath + "\\" + fName + fExt;
-
-            Program.write(fName + fExt + " wird verarbeitet");
-
-            if (!Directory.Exists(oPath))
-            {
-                Directory.CreateDirectory(oPath);
-            }
-            if (File.Exists(oFile))
-            {
-                File.Delete(oFile);
-            }
-
-            switch (fExt.ToLower())
-            {
-                case ".sqf":
-                    SQF(file, oFile);
-                    Program.write(fName + fExt + " wurde sqfObfu");
-                    break;
-                default:
-                    Copy(file, oFile);
-                    Program.write(fName + fExt + " wurde kopiert");
-                    break;
-            }
-
-            return true;
-        }
-
-        private void SQF(string file, string oFile)
-        {
-            var blockComments = @"/\*(.*?)\*/";
-            var lineComments = @"//(.*?)\r?\n";
-            var strings = @"""((\\[^\n]|[^""\n])*)""";
-            var verbatimStrings = @"@(""[^""]*"")+";
-            StreamWriter writer = new StreamWriter(oFile);
-
-            string input = macroHandler.InsertMacros(file);
-            //schnittstelle für MACRO!
-
-            string edited = Regex.Replace(input,
-                blockComments + "|" + lineComments + "|" + strings + "|" + verbatimStrings,
-                me => {
-                    if (me.Value.StartsWith("/*") || me.Value.StartsWith("//"))
-                        return me.Value.StartsWith("//") ? "" : "";
-                    // Keep the literal strings
-                    return me.Value;
-                },
-                RegexOptions.Singleline).Replace(Environment.NewLine, "");
-            writer.Write(edited);
-            writer.Close();
-        }
-
-        private void Copy(string file, string oFile)
-        {
-            File.Copy(file, oFile);
-        }
-    }
-
-    class Crypt
-    {
-        private Random random = new Random();
-        public string cryptKey;
-        private List<int> lcryptKey;
-        public Crypt(string decryptPath) {
-            cryptKey = RandomString(64);
-            lcryptKey = toArray(cryptKey);
-            Program.write("CryptKey: "+cryptKey);
-            string bakPath = Path.GetDirectoryName(decryptPath) + "\\" + Path.GetFileNameWithoutExtension(decryptPath) + ".bak";
-            if (File.Exists(bakPath))
-            {
-                File.Delete(bakPath);
-            }
-            File.Copy(decryptPath,bakPath);
-
-            var regex = new Regex("private _key = .*;", RegexOptions.Multiline);
-            string result = regex.Replace(File.ReadAllText(decryptPath), "private _key = \"" + cryptKey + "\";");
-            File.WriteAllText(decryptPath, result);
-        }
-
-        private List<int> toArray(string input)
-        {
-            return input.Select(c => (int)c).ToList();
-        }
-
-        private string toString(List<int> input)
-        {
-            IEnumerable<char> ret = input.Select(c => (char)c);
-            return String.Concat(ret);
-        }
-
-        public string crpytSqf(string path)
-        {
-            if (!File.Exists(path))
-                throw new Exception("Die Datei im Pfad "+path+" existiert nicht. Bitte überprüfe ob die Datei existiert und ob sie richtig in der CfgFunctions definiert ist.");
-            string source = File.ReadAllText(path);
-            string folder = Path.GetDirectoryName(path);
-            string cName = RandomString(32) + ".de100";
-            string cPath = folder + "\\" + cName;
-            File.Delete(path);
-
-            while (File.Exists(cPath))
-            {
-                cName = RandomString(32) + ".de100";
-                cPath = folder + "\\" + cName;
-            }
-            File.WriteAllText(cPath, lCrypt(source));
-            return cName;
-        }
-
-        private string lCrypt(string input)
-        {
-            List<int> iArray = toArray(input);
-            int kCount = lcryptKey.Count()-1;
-            int iCount = iArray.Count();
-            for (int i = 0; i < iCount; i++)
-            {
-                iArray[i] = iArray[i] + (i % (lcryptKey[i % kCount])) + lcryptKey[kCount - (i % kCount)];
-            }
-            return toString(iArray);
-        }
-
-        private string RandomString(int length)
-        {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
-            return new string(Enumerable.Repeat(chars, length)
-              .Select(s => s[random.Next(s.Length)]).ToArray());
         }
     }
 }
